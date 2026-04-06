@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pastejo Rotatínuo - PampaOS Gateway</title>
+  <style>
+    :root {
+      --bg: #f8f6f1;
+      --paper: #fffdf8;
+      --line: #d8d1c4;
+      --line-strong: #b9af9b;
+      --text: #2f2b24;
+      --muted: #6b6254;
+      --link: #3e6b3d;
+      --link-hover: #2b4b2b;
+      --accent: #ece5d8;
+      --toc: #f4efe6;
+      --infobox: #f5f0e8;
+      --shadow: rgba(34, 28, 22, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.65;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--link-hover);
+      text-decoration: underline;
+    }
+
+    .page {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 24px 20px 48px;
+    }
+
+    .topline {
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    .breadcrumb {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      color: var(--muted);
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      line-height: 1.12;
+      margin: 0 0 8px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .shortdesc {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 310px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .main {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 24px 28px 36px;
+      box-shadow: 0 2px 10px var(--shadow);
+    }
+
+    .aside {
+      position: sticky;
+      top: 18px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .toc,
+    .infobox {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 2px 10px var(--shadow);
+    }
+
+    .toc h2,
+    .infobox h2 {
+      margin: 0;
+      font-size: 1rem;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: var(--toc);
+    }
+
+    .toc ol {
+      margin: 0;
+      padding: 14px 18px 18px 32px;
+      font-size: 0.96rem;
+    }
+
+    .toc li + li {
+      margin-top: 6px;
+    }
+
+    .infobox table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+    }
+
+    .infobox th,
+    .infobox td {
+      padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .infobox th {
+      width: 38%;
+      background: var(--infobox);
+      font-weight: 700;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+    }
+
+    .lead strong {
+      font-weight: 700;
+    }
+
+    h2.section {
+      margin-top: 30px;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--line-strong);
+      font-size: 1.45rem;
+    }
+
+    h3 {
+      margin-top: 20px;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    ul {
+      margin: 0 0 14px 22px;
+      padding: 0;
+    }
+
+    li + li {
+      margin-top: 4px;
+    }
+
+    .quote {
+      margin: 20px 0;
+      padding: 14px 18px;
+      border-left: 4px solid var(--line-strong);
+      background: #faf7f1;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .compare {
+      background: #faf7f1;
+      border: 1px solid var(--line);
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+
+    .compare strong {
+      display: inline-block;
+      min-width: 140px;
+    }
+
+    figure {
+      margin: 22px 0;
+      padding: 14px;
+      background: #faf7f1;
+      border: 1px solid var(--line);
+    }
+
+    figure img {
+      width: 100%;
+      display: block;
+      height: auto;
+      border: 1px solid var(--line);
+      background: white;
+    }
+
+    figcaption {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .related {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .aside {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topline">PampaOS Gateway · protótipo de entrada canônica inspirada em wiki enciclopédica</div>
+
+    <div class="breadcrumb">
+      <a href="#">PampaOS</a> &gt; <a href="#">Pastagens</a> &gt; <span>Pastejo Rotatínuo</span>
+    </div>
+
+    <h1>Pastejo Rotatínuo</h1>
+    <div class="shortdesc">Manejo pastoral orientado por estrutura funcional do pasto e taxa de ingestão, com movimentação adaptativa dos animais.</div>
+
+    <div class="layout">
+      <main class="main">
+        <p class="lead">
+          <strong>Pastejo rotatínuo</strong> é um manejo guiado pela relação entre <strong>estrutura do dossel, facilidade de colheita e taxa de ingestão</strong>, usando movimentação adaptativa dos animais para manter o pasto dentro de uma faixa funcional. No PampaOS, ele importa porque organiza o raciocínio do gestor em torno de <strong>função biológica e variável de controle</strong>, e não apenas em torno de um nome de sistema.
+        </p>
+
+        <div class="quote">
+          O valor do rotatínuo não está em “misturar sistemas”, mas em tratar a estrutura do pasto como variável de decisão e o manejo como resposta ao campo.
+        </div>
+
+        <h2 class="section" id="definicao">Definição</h2>
+        <p>
+          Pastejo rotatínuo é um arranjo de manejo em que o objetivo principal não é “rodar piquetes”, mas manter a pastagem em uma faixa estrutural que preserve alta taxa de ingestão e boa colheita de forragem.
+        </p>
+        <p>
+          Em vez de tratar a rotação como regra mecânica, o método usa a <em>estrutura do pasto</em> como variável central de decisão e ajusta a circulação dos animais conforme a resposta real da área.
+        </p>
+
+        <h2 class="section" id="logica">Lógica operacional</h2>
+        <div class="compare"><strong>Objetivo:</strong> manter alta taxa de ingestão e colheita eficiente de forragem.</div>
+        <div class="compare"><strong>Restrição:</strong> preservar a estrutura do pasto dentro de uma faixa funcional, evitando tanto excesso quanto rebaixamento destrutivo.</div>
+        <div class="compare"><strong>Mecanismo:</strong> movimentação adaptativa dos animais conforme a condição do dossel, a pressão de pastejo e a resposta do rebrote.</div>
+
+        <h2 class="section" id="problema">Problema que resolve</h2>
+        <p>
+          O sistema tenta resolver um dilema clássico do manejo:
+        </p>
+        <ul>
+          <li>o pastejo contínuo pode ser simples, mas perde controle fino quando a observação falha;</li>
+          <li>o rotacionado clássico pode dar controle, mas às vezes vira burocracia operacional sem aderência à resposta real da pastagem.</li>
+        </ul>
+        <p>
+          O rotatínuo nasce justamente como tentativa de manter elasticidade operacional sem abandonar a disciplina estrutural do campo.
+        </p>
+
+        <h2 class="section" id="funcionamento">Funcionamento</h2>
+        <p>
+          Na prática, o método depende de observação frequente de:
+        </p>
+        <ul>
+          <li>altura ou massa funcional da pastagem;</li>
+          <li>pressão de pastejo;</li>
+          <li>taxa de rebrote;</li>
+          <li>heterogeneidade do uso da área;</li>
+          <li>tempo de ocupação que o campo suporta sem perder estrutura.</li>
+        </ul>
+        <p>
+          O gestor não gira os lotes apenas porque “chegou o dia”. Ele gira porque a condição do pasto ameaça sair da faixa funcional em que a colheita continua eficiente.
+        </p>
+
+        <h2 class="section" id="comparacao">Comparação com outros sistemas</h2>
+
+        <div class="compare"><strong>Contínuo puro:</strong> maior simplicidade, porém maior risco de perder controle estrutural e de concentrar uso em áreas preferidas.</div>
+        <div class="compare"><strong>Rotatínuo:</strong> mantém continuidade, mas introduz intervenção deliberada e redistribuição mais ativa dos animais.</div>
+        <div class="compare"><strong>Rotacionado clássico:</strong> oferece sequência mais definida de ocupação e descanso, mas pode ficar rígido demais se a lógica ecológica do campo for ignorada.</div>
+
+        <h2 class="section" id="uso">Condições de uso</h2>
+        <p>O método tende a funcionar melhor quando:</p>
+        <ul>
+          <li>há boa capacidade de leitura da estrutura do pasto;</li>
+          <li>o campo apresenta heterogeneidade relevante;</li>
+          <li>o sistema busca equilíbrio entre simplicidade e controle;</li>
+          <li>o gestor quer evitar tanto subpastejo quanto sobrepastejo.</li>
+        </ul>
+
+        <h2 class="section" id="riscos">Riscos de interpretação errada</h2>
+        <p>Alguns erros frequentes são:</p>
+        <ul>
+          <li>chamar de rotatínuo um contínuo mal monitorado;</li>
+          <li>achar que troca ocasional de potreiro já resolve o problema estrutural;</li>
+          <li>usar o termo como rótulo sem critério de ajuste;</li>
+          <li>ignorar que o método ainda exige observação frequente e julgamento.</li>
+        </ul>
+
+        <h2 class="section" id="pampaos">Implicações para o PampaOS</h2>
+        <p>
+          Dentro do PampaOS, a relevância do pastejo rotatínuo não está apenas na técnica de manejo, mas na forma como ele força o gestor a raciocinar:
+        </p>
+        <ul>
+          <li>estrutura do campo como variável de decisão;</li>
+          <li>manejo como resposta e não como ritual;</li>
+          <li>conversão biológica dependente de leitura ecológica;</li>
+          <li>simplicidade operacional com inteligência de ajuste.</li>
+        </ul>
+
+        <h2 class="section" id="apoio-visual">Apoio visual</h2>
+        <figure>
+          <img src="1.%20Projetos/Projeto%20Agropecu%C3%A1ria%20(PampaOS)/z_imagens/Pastejo%20Rotat%C3%ADnuo.png" alt="Esquema de pastejo rotatínuo">
+          <figcaption>Esquema visual do arranjo rotatínuo, útil para comparar distribuição espacial e lógica de circulação.</figcaption>
+        </figure>
+
+        <figure>
+          <img src="1.%20Projetos/Projeto%20Agropecu%C3%A1ria%20(PampaOS)/z_imagens/Pastejo%20Rotat%C3%ADnuo-1.png" alt="Ilustração complementar de pastejo rotatínuo">
+          <figcaption>Figura complementar para visualizar como o método ocupa o espaço de forma menos rígida que um rotacionado clássico.</figcaption>
+        </figure>
+
+        <div class="related">
+          <h2 class="section" id="relacionados">Notas relacionadas</h2>
+          <ul>
+            <li><a href="#">Pilar do Manejo</a></li>
+            <li><a href="#">Bocado</a></li>
+            <li><a href="#">Campo Nativo</a></li>
+            <li><a href="#">Pasto Alto</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-note">
+          Este HTML é um protótipo comparativo. Ele não tenta substituir o `pampaos.html`; serve para mostrar como uma única nota canônica ficaria em um formato mais próximo de uma wiki enciclopédica.
+        </div>
+      </main>
+
+      <aside class="aside">
+        <div class="toc">
+          <h2>Conteúdo</h2>
+          <ol>
+            <li><a href="#definicao">Definição</a></li>
+            <li><a href="#logica">Lógica operacional</a></li>
+            <li><a href="#problema">Problema que resolve</a></li>
+            <li><a href="#funcionamento">Funcionamento</a></li>
+            <li><a href="#comparacao">Comparação</a></li>
+            <li><a href="#uso">Condições de uso</a></li>
+            <li><a href="#riscos">Riscos de interpretação</a></li>
+            <li><a href="#pampaos">Implicações para o PampaOS</a></li>
+            <li><a href="#apoio-visual">Apoio visual</a></li>
+            <li><a href="#relacionados">Notas relacionadas</a></li>
+          </ol>
+        </div>
+
+        <div class="infobox">
+          <h2>Ficha da entrada</h2>
+          <table>
+            <tr>
+              <th>Tipo</th>
+              <td>Conceito de manejo pastoral</td>
+            </tr>
+            <tr>
+              <th>Bloco</th>
+              <td>Pastagens</td>
+            </tr>
+            <tr>
+              <th>Função</th>
+              <td>Explicar um critério de manejo orientado por estrutura e ingestão</td>
+            </tr>
+            <tr>
+              <th>Papel</th>
+              <td>Nota canônica individual</td>
+            </tr>
+            <tr>
+              <th>Maturidade</th>
+              <td>Intermediária</td>
+            </tr>
+            <tr>
+              <th>Relaciona-se com</th>
+              <td>Bocado, Campo Nativo, Pilar do Manejo, Pasto Alto</td>
+            </tr>
+            <tr>
+              <th>Uso no PampaOS</th>
+              <td>Critério de leitura da estrutura do pasto, da colheita de forragem e da circulação do manejo</td>
+            </tr>
+          </table>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>
